@@ -1,0 +1,51 @@
+## Игнорирование файлов сборки и запуска ##
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.suo
+*.user
+*.cache
+*.ilk
+*.nupkg
+
+## Игнорирование файлов IDE ##
+.vs/
+.vscode/
+*.swp
+*.swo
+*~
+
+## Игнорирование пользовательских файлов ##
+*.userprefs
+
+## Игнорирование результатов тестирования ##
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+## Игнорирование пакетов NuGet ##
+packages/
+[Nn]u[Gg]et[Cc]ache/
+*.nupkg
+
+## Игнорирование резервных копий ##
+*.bak
+*.tmp
+
+## Игнорирование логов и отчетов ##
+logs/
+*.log
+
+## Игнорирование специфичных для Rider файлов ##
+.idea/
+*.sln.iml
+
+## Игнорирование файлов Docker ##
+[Dd]ocker[Bb]uild/
+docker-compose.*.yml
+
+## Игнорирование файлов Azure Functions ##
+func-debug/
