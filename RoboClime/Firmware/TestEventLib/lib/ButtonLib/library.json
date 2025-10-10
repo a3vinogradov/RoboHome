@@ -1,0 +1,21 @@
+{
+    "name": "ButtonLib",
+    "version": "1.0.0",
+    "description": "Button management library with event-driven architecture",
+    "keywords": "button, events, gpio",
+    "authors": [
+        {
+            "name": "Alexander",
+            "email": "your@email.com"
+        }
+    ],
+    "frameworks": "arduino",
+    "platforms": "espressif8266, espressif32",
+    "build": {
+        "includeDir": ".",
+        "srcDir": "src"
+    },
+    "dependencies": {
+        "EventLib": "*"
+    }
+}
