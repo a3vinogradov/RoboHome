@@ -1,0 +1,173 @@
+﻿@{
+    ViewData["Title"] = "Home Page2";
+}
+@model RoboCore.ViewModel.Home.IndexViewModel
+
+<!-- Навигация -->
+@await Html.PartialAsync("SideBarPartial")
+
+<!-- Основной контент -->
+<div class="main-content">
+    <h2>Обзор устройств</h2>
+    <p>Последнее обновление: сегодня 15:42</p>
+
+    <div class="grid-container">
+        <!-- RoboDevice -->
+        @foreach (var device in Model.Devices)
+        {
+            @await Html.PartialAsync("RoboDevicePartial", device)
+        }
+        <!-- RoboWind -->
+        <div class="device-card">
+            <div class="card-header robowind-header">
+                <div class="device-title">
+                    <span class="device-icon">🌬️</span> RoboWind
+                </div>
+                <a href="http://robowind.local" class="device-link" target="_blank">Открыть интерфейс →</a>
+            </div>
+            <div class="card-content">
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">🌡️</span> Температура
+                    </div>
+                    <div class="param-value">18.7°C</div>
+                </div>
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">💧</span> Влажность
+                    </div>
+                    <div class="param-value">62%</div>
+                </div>
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">⏲️</span> Давление
+                    </div>
+                    <div class="param-value">752 мм рт.ст.</div>
+                </div>
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">🌀</span> Статус
+                    </div>
+                    <div class="param-value status-on">Норма</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RoboPlant - Рипсалис -->
+        <div class="device-card">
+            <div class="card-header roboplant-header">
+                <div class="device-title">
+                    <span class="device-icon">🌱</span> RoboPlant: Рипсалис
+                </div>
+                <a href="http://roboplant-1.local" class="device-link" target="_blank">Открыть →</a>
+            </div>
+            <div class="card-content">
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">💧</span> Влажность почвы
+                    </div>
+                    <div class="param-value">45% (min: 30%, max: 70%)</div>
+                </div>
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">🫙</span> Резервуар
+                    </div>
+                    <div class="param-value status-warning">Средний</div>
+                </div>
+                <div class="level-bar">
+                    <div class="level-fill level-medium"></div>
+                </div>
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">🤖</span> Автополив
+                    </div>
+                    <div class="param-value status-on">Активен</div>
+                </div>
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">⚠️</span> Протечка
+                    </div>
+                    <div class="param-value status-off">Сухо</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RoboPlant - Традесканция -->
+        <div class="device-card">
+            <div class="card-header roboplant-header">
+                <div class="device-title">
+                    <span class="device-icon">🌿</span> RoboPlant: Традесканция
+                </div>
+                <a href="http://roboplant-2.local" class="device-link" target="_blank">Открыть →</a>
+            </div>
+            <div class="card-content">
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">💧</span> Влажность почвы
+                    </div>
+                    <div class="param-value">68% (min: 40%, max: 80%)</div>
+                </div>
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">🫙</span> Резервуар
+                    </div>
+                    <div class="param-value status-on">Полный</div>
+                </div>
+                <div class="level-bar">
+                    <div class="level-fill level-full"></div>
+                </div>
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">🤖</span> Автополив
+                    </div>
+                    <div class="param-value status-off">Не активен</div>
+                </div>
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">⚠️</span> Протечка
+                    </div>
+                    <div class="param-value status-off">Сухо</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RoboPlant - Циссус -->
+        <div class="device-card">
+            <div class="card-header roboplant-header">
+                <div class="device-title">
+                    <span class="device-icon">🍃</span> RoboPlant: Циссус
+                </div>
+                <a href="http://roboplant-3.local" class="device-link" target="_blank">Открыть →</a>
+            </div>
+            <div class="card-content">
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">💧</span> Влажность почвы
+                    </div>
+                    <div class="param-value status-warning">28% (min: 30%, max: 75%)</div>
+                </div>
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">🫙</span> Резервуар
+                    </div>
+                    <div class="param-value status-critical">Критический</div>
+                </div>
+                <div class="level-bar">
+                    <div class="level-fill level-critical"></div>
+                </div>
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">🤖</span> Автополив
+                    </div>
+                    <div class="param-value status-error">Ошибка</div>
+                </div>
+                <div class="param-row">
+                    <div class="param-name">
+                        <span class="param-icon">⚠️</span> Протечка
+                    </div>
+                    <div class="param-value status-off">Сухо</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

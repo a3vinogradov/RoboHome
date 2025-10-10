@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboHome | Умный полив</title>
+    <style>
+        :root {
+            --primary-color: #2E7D32;  /* Основной зелёный */
+            --dark-green: #1B5E20;     /* Тёмно-зелёный */
+            --light-green: #81C784;    /* Светло-зелёный */
+            --leaf-green: #4CAF50;     /* Зелёный листвы */
+            --water-blue: #2196F3;     /* Синий воды */
+            --soil-brown: #8D6E63;     /* Коричневый почвы */
+            --danger-color: #f44336;   /* Красный для предупреждений */
+            --primary-text: #212121;
+            --secondary-text: #455A64; /* Тёмно-серый с зелёным оттенком */
+            --divider-color: #BDBDBD;
+            --background-color: #F5F5F5;
+            --card-background: #FFFFFF;
+            --panel-gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-green) 100%);
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--primary-text);
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M30,10 Q50,0 70,10 T90,30 Q100,50 90,70 T70,90 Q50,100 30,90 T10,70 Q0,50 10,30 T30,10" fill="%2381C784" opacity="0.05"/></svg>');
+            background-size: 120px 120px;
+        }
+
+        /* Шапка с листьями */
+        .tech-header {
+            background: var(--panel-gradient);
+            color: white;
+            padding: 15px 20px;
+            font-size: 24px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-header::after {
+            content: "🌱";
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 28px;
+            opacity: 0.8;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Сайдбар в стиле "сада" */
+        .sidebar {
+            width: 250px;
+            background-color: var(--dark-green);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--light-green);
+        }
+
+        .sidebar-header h2 {
+            color: white;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-header h2::before {
+            content: "🌻";
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .sidebar-menu li {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-menu li::before {
+            content: "🌿";
+            margin-right: 10px;
+            font-size: 16px;
+            opacity: 0.7;
+        }
+
+        .sidebar-menu li:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--light-green);
+        }
+
+        .sidebar-menu li.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-left: 3px solid var(--light-green);
+        }
+
+        /* Основное содержимое */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 3px solid var(--primary-color);
+        }
+
+        .view-title {
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .view-title::before {
+            content: "💧";
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        /* Карточки в стиле "грядок" */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 3px solid var(--primary-color);
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            padding: 15px;
+            color: white;
+            font-weight: 500;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-header::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .entity {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--divider-color);
+        }
+
+        .entity:last-child {
+            border-bottom: none;
+        }
+
+        .entity-name {
+            color: var(--secondary-text);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .entity-name::before {
+            content: "•";
+            color: var(--primary-color);
+            margin-right: 8px;
+            font-size: 18px;
+        }
+
+        .entity-state {
+            font-weight: 500;
+        }
+
+        /* Стили для состояний */
+        .state-on {
+            color: var(--primary-color);
+        }
+        
+        .state-off {
+            color: var(--secondary-text);
+        }
+        
+        .state-warning {
+            color: #FF9800; /* Оранжевый для предупреждений */
+        }
+        
+        .state-critical {
+            color: var(--danger-color);
+        }
+
+        /* Переключатели в стиле капель воды */
+        .toggle {
+            position: relative;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #BDBDBD;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Блоки информации */
+        .info-blocks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .block {
+            background: var(--card-background);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-top: 3px solid var(--primary-color);
+            transition: all 0.3s;
+        }
+        
+        .block:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        .block h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Стили для влажности */
+        .moisture-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: baseline;
+            margin-top: 10px;
+        }
+        
+        .moisture-value {
+            font-size: 16px;
+            color: var(--secondary-text);
+        }
+        
+        .current-moisture {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 0 10px;
+        }
+        
+        /* Стили для резервуара воды */
+        .water-tank {
+            width: 60px;
+            height: 100px;
+            border: 3px solid var(--water-blue);
+            border-radius: 5px;
+            margin: 0 auto;
+            position: relative;
+            background: #E3F2FD;
+            overflow: hidden;
+        }
+        
+        .water-level {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: var(--water-blue);
+            transition: height 0.5s ease;
+        }
+        
+        .water-label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Стиль для метеоданных */
+        .weather-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .cards-container, .info-blocks {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="tech-header">
+        RoboHome — Умный полив растений
+    </div>
+
+    <div class="container">
+        <!-- Сайдбар -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Умный сад</h2>
+                <div>Версия 2.1</div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active">Главная панель</li>
+                <li>Полив</li>
+                <li>Метеостанция</li>
+                <li>Расписание</li>
+                <li>Почва</li>
+                <li>Настройки</li>
+            </ul>
+        </div>
+
+        <!-- Основное содержимое -->
+        <div class="main-content">
+            <div class="header">
+                <div class="view-title">Состояние системы</div>
+                <div>12:34 • <span class="state-on">Автополив активен</span></div>
+            </div>
+
+            <!-- Блоки информации -->
+            <div class="info-blocks">
+                <div class="block">
+                    <h3>🌧️ Влажность почвы</h3>
+                    <div class="moisture-container">
+                        <span class="moisture-value">Сухо</span>
+                        <span class="current-moisture">62%</span>
+                        <span class="moisture-value">Мокро</span>
+                    </div>
+                </div>
+                <div class="block">
+                    <h3>💦 Последний полив</h3>
+                    <p>Сегодня, 08:30</p>
+                    <p class="state-on">12 минут</p>
+                </div>
+                <div class="block">
+                    <h3>⛲ Запас воды</h3>
+                    <div class="water-tank">
+                        <div class="water-level" style="height: 35%;"></div>
+                    </div>
+                    <div class="water-label state-warning">35%</div>
+                </div>
+                <div class="block">
+                    <h3>🌡️ Метеоданные</h3>
+                    <div class="weather-icon">☀️</div>
+                    <p>24°C | 45% влажн.</p>
+                    <p class="state-on">Ясно</p>
+                </div>
+            </div>
+
+            <!-- Карточки устройств -->
+            <div class="cards-container">
+                <!-- Карточка полива -->
+                <div class="card">
+                    <div class="card-header">Система полива</div>
+                    <div class="card-content">
+                        <div class="entity">
+                            <div>
+                                <div class="entity-name">Грядка 1 (Томаты)</div>
+                                <div class="entity-state state-on">Полив завершён</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="entity">
+                            <div>
+                                <div class="entity-name">Грядка 2 (Огурцы)</div>
+                                <div class="entity-state state-off">Ожидание</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="entity">
+                            <div>
+                                <div class="entity-name">Теплица</div>
+                                <div class="entity-state state-on">Капельный полив</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка метеостанции -->
+                <div class="card">
+                    <div class="card-header">Метеостанция</div>
+                    <div class="card-content">
+                        <div class="entity">
+                            <div>
+                                <div class="entity-name">Температура</div>
+                                <div class="entity-state">24.3°C</div>
+                            </div>
+                        </div>
+                        <div class="entity">
+                            <div>
+                                <div class="entity-name">Влажность воздуха</div>
+                                <div class="entity-state">45%</div>
+                            </div>
+                        </div>
+                        <div class="entity">
+                            <div>
+                                <div class="entity-name">Осадки</div>
+                                <div class="entity-state state-off">Нет</div>
+                            </div>
+                        </div>
+                        <div class="entity">
+                            <div>
+                                <div class="entity-name">UV индекс</div>
+                                <div class="entity-state">4 (умеренный)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка почвы -->
+                <div class="card">
+                    <div class="card-header">Датчики почвы</div>
+                    <div class="card-content">
+                        <div class="entity">
+                            <div>
+                                <div class="entity-name">Грядка 1 (Влажность)</div>
+                                <div class="entity-state state-on">62%</div>
+                            </div>
+                        </div>
+                        <div class="entity">
+                            <div>
+                                <div class="entity-name">Грядка 2 (Влажность)</div>
+                                <div class="entity-state state-warning">41%</div>
+                            </div>
+                        </div>
+                        <div class="entity">
+                            <div>
+                                <div class="entity-name">Температура почвы</div>
+                                <div class="entity-state">18.7°C</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка расписания -->
+                <div class="card">
+                    <div class="card-header">Расписание полива</div>
+                    <div class="card-content">
+                        <div class="entity">
+                            <div>
+                                <div class="entity-name">Утренний полив</div>
+                                <div class="entity-state state-on">08:30 (выполнен)</div>
+                            </div>
+                        </div>
+                        <div class="entity">
+                            <div>
+                                <div class="entity-name">Вечерний полив</div>
+                                <div class="entity-state">19:00</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="entity">
+                            <div>
+                                <div class="entity-name">Автоматический режим</div>
+                                <div class="entity-state state-on">Активен</div>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

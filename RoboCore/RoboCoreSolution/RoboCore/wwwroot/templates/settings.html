@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboCore | Настройки</title>
+    <style>
+        :root {
+            --primary-dark: #1A237E;
+            --primary-light: #3949AB;
+            --plant-green: #2E7D32;
+            --weather-blue: #0288D1;
+            --error-red: #D32F2F;
+            --text-dark: #212121;
+            --text-light: #757575;
+            --bg-color: #f5f7fa; /* Светло-серый фон вместо белого */
+            --card-bg: #FFFFFF;
+            --border-color: #E0E0E0;
+            --highlight-bg: #E3F2FD;
+            --input-bg: #ffffff; /* Белый фон полей */
+            --input-border: #BDBDBD; /* Более заметная граница */
+        }
+
+        body {
+            font-family: 'Roboto', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Общие стили шапки */
+        .system-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .logo-icon {
+            margin-right: 15px;
+            font-size: 28px;
+        }
+
+        /* Основной контейнер */
+        .settings-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Секции настроек */
+        .settings-section {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--primary-light);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            color: var(--primary-light);
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: var(--primary-dark);
+            margin: 0;
+        }
+
+        /* Улучшенные стили форм */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 15px;
+            transition: all 0.3s;
+            background-color: var(--input-bg);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(57, 73, 171, 0.2);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 15px;
+            padding-right: 35px;
+        }
+
+        /* Чекбоксы и радиокнопки */
+        .checkbox-group, .radio-group {
+            margin: 15px 0;
+        }
+
+        .checkbox-item, .radio-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .checkbox-item:hover, .radio-item:hover {
+            background-color: rgba(0,0,0,0.03);
+        }
+
+        .checkbox-item input, .radio-item input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-light);
+        }
+
+        /* Кнопки */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-light);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: var(--text-light);
+        }
+
+        .btn-secondary:hover {
+            background-color: #616161;
+        }
+
+        .btn-danger {
+            background-color: var(--error-red);
+        }
+
+        .btn-danger:hover {
+            background-color: #b71c1c;
+        }
+
+        .btn-group {
+            margin-top: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 600px) {
+            .form-control {
+                padding: 8px 12px;
+            }
+            
+            .btn {
+                padding: 8px 15px;
+                margin-bottom: 10px;
+                flex: 1 0 auto;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="system-header">
+        <div class="logo">
+            <span class="logo-icon">⚙️</span>
+            RoboCore | Настройки
+        </div>
+        <div class="system-status">
+            Версия 2.1 | Режим настроек
+        </div>
+    </div>
+
+    <div class="settings-container">
+        <!-- Настройки системы -->
+        <div class="settings-section">
+            <div class="section-header">
+                <span class="section-icon">🖥️</span>
+                <h2 class="section-title">Основные настройки</h2>
+            </div>
+            
+            <div class="form-group">
+                <label for="system-name" class="form-label">Название системы</label>
+                <input type="text" id="system-name" class="form-control" value="RoboCore Home">
+            </div>
+            
+            <div class="form-group">
+                <label for="refresh-interval" class="form-label">Интервал обновления (сек)</label>
+                <input type="number" id="refresh-interval" class="form-control" value="5" min="1" max="60">
+            </div>
+            
+            <div class="form-group">
+                <label for="timezone" class="form-label">Часовой пояс</label>
+                <select id="timezone" class="form-control">
+                    <option>UTC+3 (Москва)</option>
+                    <option>UTC+5 (Екатеринбург)</option>
+                    <option>UTC+7 (Красноярск)</option>
+                </select>
+            </div>
+            
+            <div class="checkbox-group">
+                <label class="form-label">Дополнительные функции</label>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="dark-mode" checked>
+                    <label for="dark-mode">Тёмная тема</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="notifications">
+                    <label for="notifications">Уведомления</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="autoupdate" checked>
+                    <label for="autoupdate">Автоматические обновления</label>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn">Сохранить</button>
+                <button class="btn btn-secondary">Сбросить</button>
+            </div>
+        </div>
+
+        <!-- Настройки безопасности -->
+        <div class="settings-section">
+            <div class="section-header">
+                <span class="section-icon">🔒</span>
+                <h2 class="section-title">Безопасность</h2>
+            </div>
+            
+            <div class="form-group">
+                <label for="password" class="form-label">Новый пароль</label>
+                <input type="password" id="password" class="form-control" placeholder="Введите новый пароль">
+            </div>
+            
+            <div class="form-group">
+                <label for="password-confirm" class="form-label">Подтверждение пароля</label>
+                <input type="password" id="password-confirm" class="form-control" placeholder="Повторите пароль">
+            </div>
+            
+            <div class="radio-group">
+                <label class="form-label">Уровень доступа</label>
+                <div class="radio-item">
+                    <input type="radio" id="access-basic" name="access-level" checked>
+                    <label for="access-basic">Базовый (только просмотр)</label>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" id="access-standard" name="access-level">
+                    <label for="access-standard">Стандартный (управление устройствами)</label>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" id="access-admin" name="access-level">
+                    <label for="access-admin">Администратор (полный доступ)</label>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn">Обновить пароль</button>
+                <button class="btn btn-secondary">Отмена</button>
+            </div>
+        </div>
+
+        <!-- Настройки резервного копирования -->
+        <div class="settings-section">
+            <div class="section-header">
+                <span class="section-icon">💾</span>
+                <h2 class="section-title">Резервные копии</h2>
+            </div>
+            
+            <div class="form-group">
+                <label for="backup-schedule" class="form-label">Расписание резервного копирования</label>
+                <select id="backup-schedule" class="form-control">
+                    <option>Ежедневно</option>
+                    <option>Еженедельно</option>
+                    <option>Вручную</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="last-backup" class="form-label">Последнее резервное копирование</label>
+                <input type="date" id="last-backup" class="form-control" value="2023-11-15">
+            </div>
+            
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="cloud-backup">
+                    <label for="cloud-backup">Облачное резервное копирование</label>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn">Создать резервную копию</button>
+                <button class="btn btn-secondary">Восстановить</button>
+                <button class="btn btn-danger">Удалить все копии</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
