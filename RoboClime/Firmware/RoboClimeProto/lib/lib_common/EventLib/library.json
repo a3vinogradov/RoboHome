@@ -1,0 +1,18 @@
+{
+    "name": "EventLib",
+    "version": "1.0.0",
+    "description": "Event-driven architecture library for embedded systems",
+    "keywords": "events, event-driven, embedded",
+    "authors": [
+        {
+            "name": "Alexander",
+            "email": "your@email.com"
+        }
+    ],
+    "frameworks": "arduino",
+    "platforms": "espressif8266, espressif32",
+    "headers": "EventLib.h",
+    "build": {
+        "includeDir": "."
+    }    
+}

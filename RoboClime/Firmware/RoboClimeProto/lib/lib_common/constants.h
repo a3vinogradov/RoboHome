@@ -1,0 +1,5 @@
+#pragma once
+
+//#define RESET_PERIOD 1000*21   //1000*60*60*24
+#define RESET_PERIOD 1000*60*60*24
+#define DISPLAY_UPDATE_PERIOD 3000
