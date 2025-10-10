@@ -1,0 +1,30 @@
+﻿@model RoboCore.ViewModel.Home.RoboDeviceViewModel
+
+<!-- RoboDevice -->
+<div class="device-card">
+    <div class="card-header robovirtual-header">
+        <div class="device-title">
+            <span class="device-icon">🔮</span> RoboDevice: @Model.Name
+        </div>
+        <a href="http://robowind.local" class="device-link" target="_blank">Открыть интерфейс →</a>
+    </div>
+    <div class="card-content">
+        <div class="param-row">
+            <div class="param-name">
+                <span class="param-icon">🌀</span> Статус
+            </div>
+            @if (Model.Status == RoboDeviceStatus.Ok)
+            {
+                <div class="param-value status-on">Норма</div>
+            }
+            else if (Model.Status == RoboDeviceStatus.Error)
+            {
+                <div class="param-value status-error">Ошибка!</div>
+            }
+            else if (Model.Status == RoboDeviceStatus.Warning)
+            {
+                <div class="param-value status-warning">Внимание</div>
+            }
+        </div>
+    </div>
+</div>
