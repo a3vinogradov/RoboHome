@@ -1,0 +1,3 @@
+[1215/143257.211:WARNING:chrome\browser\process_singleton_win.cc:467] Lock file exists but is writable.
+[1215/143257.850:ERROR:ui\gl\direct_composition_support.cc:615] AMD VideoProcessorGetOutputExtension failed: Неопознанная ошибка (0x80004005)
+[1215/143257.860:WARNING:ui\gl\direct_composition_support.cc:1195] QueryInterface to IDCompositionDevice4 failed: Интерфейс не поддерживается (0x80004002)
