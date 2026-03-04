@@ -32,3 +32,11 @@
 *.out
 *.app
 
+# PIO
+*.pio
+
+# Visual Studio
+*.vs
+
+# Visual Studio Code
+*.vscode
