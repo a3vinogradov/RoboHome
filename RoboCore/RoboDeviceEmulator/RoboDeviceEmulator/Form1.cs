@@ -1,39 +1,106 @@
 using EmbedIO;
 using EmbedIO.Actions;
 using EmbedIO.WebApi;
-using System.Text;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RoboDeviceEmulator
 {
     public partial class Form1 : Form
     {
-        private WebServer _webServer;
+        private List<IoTEmulator> _emulators;
+        private int _nextPort;
 
         public Form1()
         {
             InitializeComponent();
+            _emulators = new List<IoTEmulator>();
+            _nextPort = 9696;
         }
 
-        private async void Form1_Load(object sender, EventArgs e)
-        {
-            // Создаём сервер на порту 8080 (только локальный доступ)
-            _webServer = new WebServer(o => o
-                    .WithUrlPrefix("http://localhost:9696")
-                    .WithMode(HttpListenerMode.EmbedIO))
-                    .WithLocalSessionManager()
-                    .WithWebApi("/api", m => m.WithController<ApiController>())
-                    .WithAction("/index", HttpVerbs.Any, ctx => ctx.SendDataAsync(new { message = "Hola mundo" }))
-                    .WithAction("/RHL/v0-1/status", HttpVerbs.Any, ctx => ctx.SendDataAsync(new { status = "OK" }))
-                    .WithAction("/", HttpVerbs.Any, ctx => ctx.SendDataAsync(new { status = "Error" }));
-
-
-            // Запускаем сервер в фоновом потоке
-            await _webServer.RunAsync();
-        }
+        // Form1_Load СѓРґР°Р»С‘РЅ, С‚Р°Рє РєР°Рє Р»РѕРіРёРєР° РїРµСЂРµРЅРµСЃРµРЅР° РІ OnLoad
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _webServer?.Dispose();
+            foreach (var emulator in _emulators)
+            {
+                //if (emulator.IsRunning)
+                //{
+                //    emulator.StopAsync().Wait();
+                //}
+            }
+        }
+        private void CreateEmulatorButton_Click(object sender, EventArgs e)
+        {
+            string name = $"Emulator_{_emulators.Count + 1}";
+            string url = $"http://localhost:{_nextPort++}";
+            var emulator = new IoTEmulator(name, url);
+            _emulators.Add(emulator);
+            UpdateEmulatorsGrid();
+            //_ = emulator.StartAsync();
+        }
+
+        private void UpdateEmulatorsGrid()
+        {
+            emulatorsDataGridView.Rows.Clear();
+            foreach (var emulator in _emulators)
+            {
+                var row = new DataGridViewRow();
+                row.CreateCells(emulatorsDataGridView);
+                row.Cells[0].Value = emulator.Name;
+                row.Cells[1].Value = emulator.Url;
+                row.Cells[1].Tag = emulator.Url;
+                row.Cells[2].Value = false;
+                row.Cells[3].Value = "Start";
+                row.Cells[4].Value = "РЈРґР°Р»РёС‚СЊ";
+                row.Tag = emulator;
+                emulatorsDataGridView.Rows.Add(row);
+            }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            UpdateEmulatorsGrid();
+        }
+
+        private void emulatorsDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+            if (e.ColumnIndex == emulatorsDataGridView.Columns["Stop"]?.Index)
+            {
+                var row = emulatorsDataGridView.Rows[e.RowIndex];
+                var emulator = row.Tag as IoTEmulator;
+                if (emulator != null)
+                {
+                    //_ = emulator.StopAsync();
+                    UpdateEmulatorsGrid();
+                }
+            }
+            else if (e.ColumnIndex == emulatorsDataGridView.Columns["Url"]?.Index)
+            {
+                var cell = emulatorsDataGridView.Rows[e.RowIndex].Cells["Url"];
+                var url = cell.Tag as string;
+                if (!string.IsNullOrEmpty(url))
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
+                }
+            }
+            else if (e.ColumnIndex == grdColumnDelete.Index)
+            {
+                MessageBox.Show("РљРЅРѕРїРєР° РЈРґР°Р»РёС‚СЊ РЅР°Р¶Р°С‚Р°");
+            }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            UpdateEmulatorsGrid();
+        }
+
+        private void saveConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
